@@ -13,3 +13,6 @@ dependencies:
     ItemsAdder:
       load: AFTER
       required: true
+    Geyser-Spigot:
+      load: AFTER
+      required: true
