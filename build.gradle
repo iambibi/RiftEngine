@@ -26,3 +26,14 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
+
+processResources {
+    filteringCharset = 'UTF-8'
+
+    def pluginProps = ["version": version, "minecraftVersion": minecraftVersion]
+    inputs.properties(pluginProps)
+
+    filesMatching('paper-plugin.yml') {
+        expand(pluginProps)
+    }
+}
