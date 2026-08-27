@@ -1,5 +1,6 @@
 # Plugin RiftEngine
-Plugin collaboratif pour avancer sur la possibilité d'ouvrir OpenMC aux bedrocks
+Plugin collaboratif pour avancer sur la possibilité d'ouvrir OpenMC aux bedrocks.
+Aucune version pré construite sera donné, sur le github. Si vous voulez tester, compilez le.
 
 <a href="https://github.com/ServerOpenMC/RiftEngine/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ServerOpenMC/RiftEngine" alt="Contributors" />
