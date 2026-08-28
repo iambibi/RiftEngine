@@ -1,10 +1,9 @@
 package fr.openmc.riftengine.core.registry.mapping;
 
-import fr.openmc.core.bootstrap.registries.KeyedRegistry;
 import fr.openmc.core.bootstrap.registries.Registry;
-import fr.openmc.riftengine.core.registry.mapping.content.LangMapping;
 
 public class MappingRegistry extends Registry<String, Mapping<String, String>> {
+    // todo: regarder si c'est réelement utile, inutilisé car le systeme initial de translation ds le pack et tt ne marche pas et geyser on deja un support pour ça
+
     // ** REGISTER MAPPING **
-    public final Mapping<String, String> LANG_MAPPING = register("langs", new LangMapping());
 }

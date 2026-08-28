@@ -3,9 +3,9 @@ package fr.openmc.riftengine.core.converter;
 import fr.openmc.core.bootstrap.integration.OMCLogger;
 import fr.openmc.riftengine.core.RiftPlugin;
 import fr.openmc.riftengine.core.converter.writers.PackWriter;
-import fr.openmc.riftengine.core.converter.writers.langs.LangWriter;
 import fr.openmc.riftengine.core.converter.writers.manifest.ManifestWriter;
 import fr.openmc.riftengine.core.converter.writers.manifest.PackIdentity;
+import fr.openmc.riftengine.core.converter.writers.translations.TranslationInjector;
 import fr.openmc.riftengine.core.utils.ZipUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,7 +29,7 @@ public class ConverterManager {
             identity = PackIdentity.loadOrCreate(plugin);
             writers.addAll(List.of(
                     new ManifestWriter(identity),
-                    new LangWriter()
+                    new TranslationInjector()
             ));
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors d'initialisation du ConverterManager", e);

@@ -25,7 +25,7 @@ public class ManifestWriter implements PackWriter {
                 "description": "Généré par RiftEngine à partir de celui de Java",
                 "uuid": "%s",
                 "version": [1, 0, 0],
-                "min_engine_version": [26, 2, 0]
+                "min_engine_version": [26, 44, 0]
               },
               "modules": [
                 {
