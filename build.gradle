@@ -8,13 +8,32 @@ version = '0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    // * ItemsAdder
+    maven {url "https://maven.devs.beer/"}
+    // * GeyserMC
+    maven {url "https://repo.opencollab.dev/main/"}
 }
 
 dependencies {
     paperweight.paperDevBundle "${minecraftVersion}.build.${paperVersion}"
 
+    // Dependancies
+    compileOnly "beer.devs:itemsadder-api:${itemsAdderVersion}"
+    compileOnly "org.geysermc.geyser:api:${geyserApiVersion}"
+
     compileOnly files("libs/OpenMC.jar")
     implementation "org.jetbrains:annotations:${jetbrainsAnnotationsVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+processResources {
+    filteringCharset = 'UTF-8'
+
+    def pluginProps = ["version": version, "minecraftVersion": minecraftVersion]
+    inputs.properties(pluginProps)
+
+    filesMatching('paper-plugin.yml') {
+        expand(pluginProps)
+    }
 }

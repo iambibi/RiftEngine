@@ -8,8 +8,11 @@ api-version: ${minecraftVersion}
 dependencies:
   server:
     OpenMC:
-      load: AFTER
+      load: BEFORE
       required: true
     ItemsAdder:
-      load: AFTER
+      load: BEFORE
+      required: true
+    Geyser-Spigot:
+      load: BEFORE
       required: true
