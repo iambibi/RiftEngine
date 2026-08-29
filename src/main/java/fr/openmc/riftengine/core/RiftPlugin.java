@@ -2,6 +2,7 @@ package fr.openmc.riftengine.core;
 
 import fr.openmc.core.bootstrap.integration.OMCLogger;
 import fr.openmc.riftengine.core.converter.ConverterManager;
+import fr.openmc.riftengine.core.registry.glyphs.GlyphsRegistry;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,7 +41,10 @@ public class RiftPlugin extends JavaPlugin implements EventRegistrar {
         // * Listeners
         registerEvent(SessionLoadResourcePacksEvent.class, this::onLoadResourcePacks);
 
+        GlyphsRegistry glyphsRegistry = RiftRegistry.GLYPHS;
         OMCLogger.info("RiftEngine activé!");
+        OMCLogger.infoFormatted(glyphsRegistry.size() + "/" + glyphsRegistry.maxSize() + "glyphs enregistré");
+        OMCLogger.infoFormatted("Glyphs : " + glyphsRegistry.values());
     }
 
     @Override
