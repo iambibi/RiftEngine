@@ -16,10 +16,10 @@ public abstract class Glyph {
         this.row = row;
         this.col = col;
 
-        this.bedrockChar = getBedrockChar();
+        this.bedrockChar = buildBedrockChar();
     }
 
-    private char getBedrockChar() {
+    private char buildBedrockChar() {
         int page = Integer.parseInt(this.page, 16);
         return (char) ((page << 8) | (row * 16 + col));
     }

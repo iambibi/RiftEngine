@@ -70,6 +70,7 @@ public class RiftPlugin extends JavaPlugin implements EventRegistrar {
 
         if (pack == null) return;
 
+        event.unregister(pack.uuid());
         event.register(pack, PriorityOption.HIGHEST);
 
         OMCLogger.successFormatted("RiftEngine: pack registered !");
