@@ -27,6 +27,8 @@ public class RiftPlugin extends JavaPlugin implements EventRegistrar {
 
     private ConverterManager converterManager;
 
+    public static final int[] RP_VERSION = new int[] {1,0};
+
     @Override
     public void onEnable() {
         instance = this;
@@ -70,7 +72,6 @@ public class RiftPlugin extends JavaPlugin implements EventRegistrar {
 
         if (pack == null) return;
 
-        event.unregister(pack.uuid());
         event.register(pack, PriorityOption.HIGHEST);
 
         OMCLogger.successFormatted("RiftEngine: pack registered !");
