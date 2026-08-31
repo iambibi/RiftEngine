@@ -2,6 +2,7 @@ package fr.openmc.riftengine.core.converter.writers.translations;
 
 import com.google.gson.*;
 import fr.openmc.riftengine.core.converter.writers.PackWriter;
+import fr.openmc.riftengine.core.utils.ScanUtils;
 import org.geysermc.geyser.api.GeyserApi;
 
 import java.io.IOException;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  * Pas réelement un pack writer, on mets juste les .json des langs dans plugins/Geyser-Spigot/locales/overrides.
@@ -30,7 +30,7 @@ public class TranslationInjector implements PackWriter {
 
         Files.createDirectories(localesOverrides);
 
-        List<Path> locales = scanAllLocalesPath(javaRootPath);
+        List<Path> locales = ScanUtils.scanAllPath(javaRootPath, "lang");
 
         Path mergedDirectory = Files.createTempDirectory("merged-locales");
         List<Path> mergedLocales = mergeLocales(locales, mergedDirectory);
@@ -42,25 +42,6 @@ public class TranslationInjector implements PackWriter {
                     StandardCopyOption.REPLACE_EXISTING
             );
         }
-    }
-
-    private List<Path> scanAllLocalesPath(Path javaRootPath) throws IOException {
-        List<Path> localesPath = new ArrayList<>();
-
-        Path assetsPath = javaRootPath.resolve("assets");
-        if (!Files.isDirectory(assetsPath)) return localesPath;
-
-        try (Stream<Path> namespaces = Files.list(assetsPath)) {
-            for (Path namespaceDir : namespaces.filter(Files::isDirectory).toList()) {
-                Path langDir = namespaceDir.resolve("lang");
-                if (!Files.isDirectory(langDir)) continue;
-
-                try (Stream<Path> langFiles = Files.list(langDir)) {
-                    localesPath.addAll(langFiles.filter(Files::isRegularFile).toList());
-                }
-            }
-        }
-        return localesPath;
     }
 
     private List<Path> mergeLocales(List<Path> localesPath, Path outputDirectory) throws IOException {

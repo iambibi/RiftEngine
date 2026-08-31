@@ -1,36 +1,30 @@
 package fr.openmc.riftengine.core;
 
-import fr.openmc.core.bootstrap.features.types.HasListeners;
+
 import fr.openmc.core.bootstrap.integration.OMCLogger;
 import fr.openmc.core.bootstrap.registries.LifecycleRegistry;
 import fr.openmc.core.bootstrap.registries.RegistryContext;
 import fr.openmc.core.bootstrap.registries.RegistryLoadingType;
-import fr.openmc.core.features.events.contents.dailyevents.DailyEventsRegistry;
-import fr.openmc.core.features.events.contents.weeklyevents.WeeklyEventsRegistry;
-import fr.openmc.core.registry.ambient.CustomAmbientRegistry;
-import fr.openmc.core.registry.enchantments.CustomEnchantmentRegistry;
-import fr.openmc.core.registry.items.CustomItemRegistry;
-import fr.openmc.core.registry.lootboxes.CustomLootboxRegistry;
-import fr.openmc.core.registry.loottable.CustomLootTableRegistry;
-import fr.openmc.core.registry.mobs.CustomMobRegistry;
+import fr.openmc.riftengine.core.registry.glyphs.GlyphsRegistry;
 import fr.openmc.riftengine.core.registry.mapping.MappingRegistry;
-import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings("UnstableApiUsage")
 public final class RiftRegistry {
     // * Registre globaux
     public static MappingRegistry MAPPINGS;
+    public static GlyphsRegistry GLYPHS;
 
     private static final List<LifecycleRegistry> LOADED = new ArrayList<>();
 
     private static final List<RegistryContext> ALL = List.of(
             new RegistryContext(
                     () -> MAPPINGS = new MappingRegistry(),
+                    RegistryLoadingType.RUNTIME),
+            new RegistryContext(
+                    () -> GLYPHS = new GlyphsRegistry(),
                     RegistryLoadingType.RUNTIME)
     );
 

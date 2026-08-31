@@ -17,6 +17,8 @@ public class ManifestWriter implements PackWriter {
 
     @Override
     public void write(Path bedrockRootPath, Path javaRootPath) throws IOException {
+        int[] v = identity.version();
+        String versionJson = "[" + v[0] + ", " + v[1] + ", " + v[2] + "]";
         String manifest = """
             {
               "format_version": 2,
@@ -24,18 +26,18 @@ public class ManifestWriter implements PackWriter {
                 "name": "RiftPack",
                 "description": "Généré par RiftEngine à partir de celui de Java",
                 "uuid": "%s",
-                "version": [1, 0, 0],
-                "min_engine_version": [26, 44, 0]
+                "version": %s,
+                "min_engine_version": [1, 21, 0]
               },
               "modules": [
                 {
                   "type": "resources",
                   "uuid": "%s",
-                  "version": [1, 0, 0]
+                  "version": %s
                 }
               ]
             }
-            """.formatted(identity.headerUuid(), identity.moduleUuid());
+            """.formatted(identity.headerUuid(), versionJson, identity.moduleUuid(), versionJson);
 
         Files.writeString(bedrockRootPath.resolve("manifest.json"), manifest, StandardCharsets.UTF_8);
 

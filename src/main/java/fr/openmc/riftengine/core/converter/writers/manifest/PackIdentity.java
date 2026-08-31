@@ -7,42 +7,58 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import static fr.openmc.riftengine.core.RiftPlugin.RP_VERSION;
+
 public class PackIdentity {
- 
+
     private final UUID headerUuid;
     private final UUID moduleUuid;
- 
-    private PackIdentity(UUID headerUuid, UUID moduleUuid) {
+    private final int[] version; // * [major, minor, patch]
+
+    private PackIdentity(UUID headerUuid, UUID moduleUuid, int[] version) {
         this.headerUuid = headerUuid;
         this.moduleUuid = moduleUuid;
+        this.version = version;
     }
- 
+
     public UUID headerUuid() {
         return headerUuid;
     }
- 
+
     public UUID moduleUuid() {
         return moduleUuid;
     }
- 
+
+    public int[] version() {
+        return version;
+    }
+
     public static PackIdentity loadOrCreate(JavaPlugin plugin) throws IOException {
         File file = new File(plugin.getDataFolder(), "pack-identity.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
- 
-        boolean changed = false;
+
         if (!config.contains("header-uuid")) {
             config.set("header-uuid", UUID.randomUUID().toString());
-            changed = true;
         }
         if (!config.contains("module-uuid")) {
             config.set("module-uuid", UUID.randomUUID().toString());
-            changed = true;
         }
-        if (changed) config.save(file);
- 
+
+        int major = config.getInt("version.major", RP_VERSION[0]);
+        int minor = config.getInt("version.minor", RP_VERSION[1]);
+        int patch = config.getInt("version.patch", 0);
+
+        patch++;
+        config.set("version.major", major);
+        config.set("version.minor", minor);
+        config.set("version.patch", patch);
+
+        config.save(file);
+
         return new PackIdentity(
-            UUID.fromString(config.getString("header-uuid")),
-            UUID.fromString(config.getString("module-uuid"))
+                UUID.fromString(config.getString("header-uuid")),
+                UUID.fromString(config.getString("module-uuid")),
+                new int[]{major, minor, patch}
         );
     }
 }
