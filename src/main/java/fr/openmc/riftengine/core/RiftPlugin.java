@@ -14,6 +14,7 @@ import org.geysermc.geyser.api.pack.PackCodec;
 import org.geysermc.geyser.api.pack.ResourcePack;
 import org.geysermc.geyser.api.pack.option.PriorityOption;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -25,6 +26,9 @@ public class RiftPlugin extends JavaPlugin implements EventRegistrar {
     @Setter
     private static ResourcePack resourcePack;
 
+    @Getter
+    private RiftConfig riftConfig;
+
     private ConverterManager converterManager;
 
     public static final int[] RP_VERSION = new int[] {1,0};
@@ -32,6 +36,11 @@ public class RiftPlugin extends JavaPlugin implements EventRegistrar {
     @Override
     public void onEnable() {
         instance = this;
+        try {
+            riftConfig = new RiftConfig(this, this.getConfig());
+        } catch (IOException e) {
+            throw new RuntimeException("Erreur lors de la lecture du fichier config.yml", e);
+        }
 
         // * Registries internal
         RiftRegistry.initAll();
