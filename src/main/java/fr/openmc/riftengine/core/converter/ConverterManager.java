@@ -5,6 +5,7 @@ import fr.openmc.riftengine.core.RiftConfig;
 import fr.openmc.riftengine.core.RiftPlugin;
 import fr.openmc.riftengine.core.converter.writers.PackWriter;
 import fr.openmc.riftengine.core.converter.writers.font.FontWriter;
+import fr.openmc.riftengine.core.converter.writers.manifest.IconWriter;
 import fr.openmc.riftengine.core.converter.writers.manifest.ManifestWriter;
 import fr.openmc.riftengine.core.converter.writers.manifest.PackIdentity;
 import fr.openmc.riftengine.core.converter.writers.translations.TranslationInjector;
@@ -33,6 +34,7 @@ public class ConverterManager {
         try {
             identity = PackIdentity.loadOrCreate(plugin);
             writers.addAll(List.of(
+                    new IconWriter(),
                     new ManifestWriter(identity),
                     new TranslationInjector(),
                     new FontWriter(),
