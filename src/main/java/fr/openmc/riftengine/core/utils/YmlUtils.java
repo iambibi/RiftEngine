@@ -17,6 +17,12 @@ public class YmlUtils {
         }
     }
 
+    public static String getString(Object obj, String def) {
+        if (obj == null) return def;
+        if (obj instanceof String s) return s;
+        return String.valueOf(obj);
+    }
+
     public static Integer getInt(Object obj, Integer def) {
         if (obj == null) return def;
         if (obj instanceof Number n) return n.intValue();

@@ -5,11 +5,13 @@ import fr.openmc.core.bootstrap.registries.Registry;
 import fr.openmc.riftengine.core.scanner.general.YamlNamespaceIAScanner;
 import fr.openmc.riftengine.core.scanner.general.YamlScanner;
 import fr.openmc.riftengine.core.scanner.icons.IconScanner;
+import fr.openmc.riftengine.core.scanner.items.ItemScanner;
 
 public class ScannerRegistry extends Registry<String, AbstractScanner<?, ?>>
     implements KeyedRegistry<String, AbstractScanner<?, ?>> {
 
     public final IconScanner ICONS = register(new IconScanner());
+    public final ItemScanner ITEMS = register(new ItemScanner());
     public final YamlNamespaceIAScanner YAML_ITEMSADDER_NAMESPACE = register(new YamlNamespaceIAScanner());
     public final YamlScanner YAML = register(new YamlScanner());
 
