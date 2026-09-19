@@ -17,9 +17,8 @@ public record ItemResource(
 
     public static ItemResource from(Map<?, ?> data) {
         Object resourceObj = data.get("resource");
-        if (!(resourceObj instanceof Map<?, ?> resource)) {
+        if (!(resourceObj instanceof Map<?, ?> resource))
             return new ItemResource(Material.valueOf(DEFAULT_MATERIAL), false, List.of(), null, null);
-        }
 
         Material material = Material.valueOf(YmlUtils.getString(
                 resource.get("material"), DEFAULT_MATERIAL).toUpperCase());
@@ -29,6 +28,9 @@ public record ItemResource(
         List<String> textures = resource.get("textures") instanceof List<?> list
                 ? list.stream().map(String::valueOf).toList()
                 : List.of();
+
+        if (textures.isEmpty() && resource.get("textures") instanceof String string)
+            textures = List.of(string);
 
         String modelPath = resource.get("model_path") != null
                 ? String.valueOf(resource.get("model_path"))
@@ -41,15 +43,13 @@ public record ItemResource(
         return new ItemResource(material, generate, textures, modelPath, modelId);
     }
 
-    public boolean hasCustomModel() {
-        return model != null;
-    }
-
     public boolean hasTextures() {
+        if (textures == null) return false;
         return !textures.isEmpty();
     }
 
     public boolean hasModel() {
+        if (model == null) return false;
         return !model.isEmpty();
     }
 }

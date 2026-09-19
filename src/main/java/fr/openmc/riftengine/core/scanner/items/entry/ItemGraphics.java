@@ -15,6 +15,7 @@ public record ItemGraphics(
             return new ItemGraphics(null, null, Material.PAPER);
         }
 
+        // todo: pas forcement un string, peut etre une map qui contient d'autres champs
         String texture = YmlUtils.getString(graphics.get("texture"), null);
         String model = YmlUtils.getString(graphics.get("model"), null);
         Material material = Material.valueOf(YmlUtils.getString(
@@ -24,11 +25,13 @@ public record ItemGraphics(
     }
 
     public boolean hasTexture() {
-        return texture != null;
+        if (texture == null) return false;
+        return !texture.isEmpty();
     }
 
     public boolean hasModel() {
-        return model != null;
+        if (model == null) return false;
+        return !model.isEmpty();
     }
 
     public boolean isPresent() {

@@ -52,4 +52,33 @@ public class IdentifierUtils {
                 .resolve("textures")
                 .resolve(texturePath);
     }
+
+    /**
+     * Résout un identifiant en un chemin de fichier dans les assets pour les models
+     */
+    public static Path resolveModelId(Path rootPath, String id) {
+        String normalizedId = normalizeId(id);
+        String[] split = normalizedId.split(":", 2);
+
+        String namespace;
+        String modelPath;
+
+        if (split.length == 2) {
+            namespace = split[0];
+            modelPath = split[1];
+        } else {
+            namespace = "minecraft";
+            modelPath = split[0];
+        }
+
+        if (!modelPath.endsWith(".json")) {
+            modelPath += ".json";
+        }
+
+        return rootPath
+                .resolve("assets")
+                .resolve(namespace)
+                .resolve("models")
+                .resolve(modelPath);
+    }
 }

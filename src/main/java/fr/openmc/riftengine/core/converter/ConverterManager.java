@@ -1,18 +1,24 @@
 package fr.openmc.riftengine.core.converter;
 
+import fr.openmc.core.OMCRegistry;
 import fr.openmc.core.bootstrap.integration.OMCLogger;
 import fr.openmc.core.utils.FilesUtils;
 import fr.openmc.riftengine.core.RiftConfig;
 import fr.openmc.riftengine.core.RiftPlugin;
+import fr.openmc.riftengine.core.RiftRegistry;
 import fr.openmc.riftengine.core.converter.writers.PackWriter;
 import fr.openmc.riftengine.core.converter.writers.glyph.font.FontWriter;
 import fr.openmc.riftengine.core.converter.writers.glyph.icons.IconsWriter;
 import fr.openmc.riftengine.core.converter.writers.glyph.icons.SymbolWriter;
+import fr.openmc.riftengine.core.converter.writers.items.ItemsMappingWriter;
+import fr.openmc.riftengine.core.converter.writers.items.ItemsTextureJsonWriter;
+import fr.openmc.riftengine.core.converter.writers.items.ItemsTextureWriter;
 import fr.openmc.riftengine.core.converter.writers.manifest.IconWriter;
 import fr.openmc.riftengine.core.converter.writers.manifest.ManifestWriter;
 import fr.openmc.riftengine.core.converter.writers.manifest.PackIdentity;
 import fr.openmc.riftengine.core.converter.writers.translations.TranslationInjector;
 import fr.openmc.riftengine.core.converter.writers.ui.ScoreboardUiWriter;
+import fr.openmc.riftengine.core.scanner.items.ItemEntry;
 import fr.openmc.riftengine.core.utils.ZipUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,14 +44,21 @@ public class ConverterManager {
 
         try {
             identity = PackIdentity.loadOrCreate(plugin);
+            List<ItemEntry> items = RiftRegistry.SCANNERS.ITEMS.scan(itemsAdderContents);
             writers.addAll(List.of(
                     new IconWriter(),
                     new ManifestWriter(identity),
+
                     new TranslationInjector(),
                     new FontWriter(),
                     new ScoreboardUiWriter(config.isHideScoreboardNumberBedrock()),
+
                     new IconsWriter(itemsAdderContents),
-                    new SymbolWriter()
+                    new SymbolWriter(),
+
+                    new ItemsTextureJsonWriter(items),
+                    new ItemsTextureWriter(items),
+                    new ItemsMappingWriter()
             ));
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors d'initialisation du ConverterManager", e);
@@ -55,7 +68,7 @@ public class ConverterManager {
     /**
      * Prends un pack java et le convertit en pack bedrock
      */
-    public Path generateConvertedPack() throws IOException {
+    public Path generateConvertedPack() throws Exception {
         Path javaPackPath = getJavaPackPath(RiftPlugin.getInstance());
 
         Path outputDir = plugin.getDataFolder().toPath().resolve("output");
