@@ -49,7 +49,6 @@ public class CustomModelDataScanner extends AbstractScanner<Map<Material, Map<St
             mappedCache.put(materialKey, value);
         }
 
-        System.out.println(mappedCache);
         return mappedCache;
     }
 }

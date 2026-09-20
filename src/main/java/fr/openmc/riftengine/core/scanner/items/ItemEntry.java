@@ -3,24 +3,50 @@ package fr.openmc.riftengine.core.scanner.items;
 import fr.openmc.riftengine.core.scanner.items.entry.ItemGraphics;
 import fr.openmc.riftengine.core.scanner.items.entry.ItemResource;
 import fr.openmc.riftengine.core.utils.IdentifierUtils;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Material;
 
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.function.Function;
 
-public record ItemEntry(
-        String namespace,
-        String key,
-        Integer customModelData,
+@Getter
+public class ItemEntry {
+    private final String namespace;
+    private final String key;
+    private final Integer customModelData;
+    private final Material material;
 
-        // * Méthodes de création d'items (moderne ou legacy)
-        ItemResource resource,
-        ItemGraphics graphics,
-        Function<Path, Path> resourcePath,
+    private final ItemResource resource;
+    private final ItemGraphics graphics;
+    private final Function<Path, Path> resourcePath;
 
-        Path sourceYml
-) {
+    private final Path sourceYml;
+
+    private ItemEntry(
+            String namespace,
+            String key,
+            Integer customModelData,
+            Material material,
+
+            // * Méthodes de création d'items (moderne ou legacy)
+            ItemResource resource,
+            ItemGraphics graphics,
+            Function<Path, Path> resourcePath,
+
+            Path sourceYml
+    ) {
+        this.namespace = namespace;
+        this.key = key;
+        this.customModelData = customModelData;
+        this.material = material;
+        this.resource = resource;
+        this.graphics = graphics;
+        this.resourcePath = resourcePath;
+        this.sourceYml = sourceYml;
+    }
+
     public static ItemEntry from(Map<Material, Map<String, Integer>> cmdCache, Path sourceYml, String namespace, String key, Map<?, ?> data) {
         ItemResource itemResource = ItemResource.from(data);
         ItemGraphics itemGraphics = ItemGraphics.from(data);
@@ -37,6 +63,7 @@ public record ItemEntry(
                 namespace,
                 key,
                 customModelData,
+                material,
                 itemResource,
                 itemGraphics,
                 resolvePathFunction(namespace, itemGraphics, itemResource),
@@ -102,9 +129,6 @@ public record ItemEntry(
             }
         }
 
-        System.out.println("NULL BECAUSE (id" + namespace + ")");
-        System.out.println("ressource = " + resource);
-        System.out.println("graphics = " + graphics);
         return _ -> null;
     }
 

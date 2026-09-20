@@ -58,7 +58,7 @@ public class ConverterManager {
 
                     new ItemsTextureJsonWriter(items),
                     new ItemsTextureWriter(items),
-                    new ItemsMappingWriter()
+                    new ItemsMappingWriter(items)
             ));
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors d'initialisation du ConverterManager", e);

@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import fr.openmc.core.bootstrap.integration.OMCLogger;
 import fr.openmc.riftengine.core.converter.writers.PackWriter;
 import fr.openmc.riftengine.core.scanner.items.ItemEntry;
+import fr.openmc.riftengine.core.utils.IdentifierUtils;
 import fr.openmc.riftengine.core.utils.PathUtils;
 
 import java.io.IOException;
@@ -30,10 +31,10 @@ public class ItemsTextureWriter implements PackWriter {
                 OMCLogger.warn("Item {} a pas de resource id", itemEntry.namespacedId());
                 continue;
             }
-            System.out.println(ressouceId);
+
             if (ressouceId.split(":")[0].equals("minecraft")) continue;
 
-            Path resourcePath = itemEntry.resourcePath().apply(javaRootPath);
+            Path resourcePath = itemEntry.getResourcePath().apply(javaRootPath);
             if (resourcePath == null) {
                 OMCLogger.warn("Item {} a aucune resource (Model ou texture)", itemEntry.namespacedId());
                 continue;
@@ -45,7 +46,8 @@ public class ItemsTextureWriter implements PackWriter {
                 continue;
             }
 
-            Path outputFile = bedrockRootPath.resolve(reducedPath);
+            Path outputFile = bedrockRootPath.resolve(
+                    IdentifierUtils.toBedrockTexturePath(reducedPath.toString()));
             Files.createDirectories(outputFile.getParent());
             Files.copy(resourcePath, outputFile, StandardCopyOption.REPLACE_EXISTING);
         }

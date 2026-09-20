@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import fr.openmc.core.bootstrap.integration.OMCLogger;
 import fr.openmc.riftengine.core.converter.writers.PackWriter;
 import fr.openmc.riftengine.core.scanner.items.ItemEntry;
+import fr.openmc.riftengine.core.utils.IdentifierUtils;
 import fr.openmc.riftengine.core.utils.PathUtils;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Locale;
 
 public class ItemsTextureJsonWriter implements PackWriter {
     private final List<ItemEntry> items;
@@ -33,24 +35,31 @@ public class ItemsTextureJsonWriter implements PackWriter {
         JsonObject textureData = new JsonObject();
 
         for (ItemEntry itemEntry : items) {
+            String resourceId = itemEntry.getBestResourceId();
+            String texture = null;
+
+            if (resourceId == null) {
+                texture = "textures/items/" + itemEntry.getMaterial().name().toLowerCase();;
+            } else if (resourceId.startsWith("minecraft:")) {
+                String path = IdentifierUtils.normalizeId(resourceId).split(":", 2)[1];
+                texture = IdentifierUtils.toBedrockTexturePath("textures/" + path);
+            } else {
+                Path resourcePath = itemEntry.getResourcePath().apply(javaRootPath);
+                Path reducedPath = resourcePath == null ? null
+                        : PathUtils.getPathFromRoot(resourcePath, "textures");
+                if (reducedPath != null) {
+                    texture = IdentifierUtils.toBedrockTexturePath(reducedPath.toString())
+                            .replaceFirst("\\.[^/.]+$", "");
+                }
+            }
+
+            if (texture == null) {
+                OMCLogger.warn("Item {} : impossible de déterminer la texture", itemEntry.namespacedId());
+                continue;
+            }
+
             JsonObject itemData = new JsonObject();
-
-            Path resourcePath = itemEntry.resourcePath().apply(javaRootPath);
-            if (resourcePath == null) {
-                OMCLogger.warn("Item {} a aucune resource (Model ou texture)", itemEntry.namespacedId());
-                continue;
-            }
-
-            Path reducedPath = PathUtils.getPathFromRoot(resourcePath, "textures");
-            if (reducedPath == null) {
-                OMCLogger.warn("Item {} a un Path impossible a réduire {}", itemEntry.namespacedId(), resourcePath.toString());
-                continue;
-            }
-
-            String texture = reducedPath.toString().replaceFirst("\\.[^/.]+$", "");
-
             itemData.addProperty("textures", texture);
-
             textureData.add(itemEntry.namespacedId(), itemData);
         }
 

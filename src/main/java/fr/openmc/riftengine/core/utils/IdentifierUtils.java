@@ -81,4 +81,13 @@ public class IdentifierUtils {
                 .resolve("models")
                 .resolve(modelPath);
     }
+
+    public static String toBedrockTexturePath(String javaPath) {
+        if (javaPath.startsWith("textures/item/"))
+            return "textures/items/" + javaPath.substring("textures/item/".length());
+        if (javaPath.startsWith("textures/block/"))
+            return "textures/blocks/" + javaPath.substring("textures/block/".length());
+
+        return javaPath;
+    }
 }

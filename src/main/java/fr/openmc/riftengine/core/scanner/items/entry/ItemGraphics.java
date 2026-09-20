@@ -15,7 +15,7 @@ public record ItemGraphics(
             return new ItemGraphics(null, null, Material.PAPER);
         }
 
-        // todo: pas forcement un string, peut etre une map qui contient d'autres champs
+        // todo: supporter textures (pour block, ou bow, fishing rod, ect)
         String texture = YmlUtils.getString(graphics.get("texture"), null);
         String model = YmlUtils.getString(graphics.get("model"), null);
         Material material = Material.valueOf(YmlUtils.getString(
