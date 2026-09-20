@@ -4,5 +4,5 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public interface PackWriter {
-    void write(Path bedrockRootPath, Path javaRootPath) throws IOException;
+    void write(Path bedrockRootPath, Path javaRootPath) throws Exception;
 }

@@ -4,14 +4,16 @@ plugins {
 }
 
 group = 'fr.openmc.riftengine'
-version = '0.2-SNAPSHOT'
+version = '0.3-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    // * ItemsAdder
-    maven {url "https://maven.devs.beer/"}
     // * GeyserMC
     maven {url "https://repo.opencollab.dev/main/"}
+    // * PaperMC
+    maven { url = "https://repo.papermc.io/repository/maven-public/" }
+    // * ItemsAdder
+    maven {url "https://maven.devs.beer/"}
 }
 
 dependencies {
